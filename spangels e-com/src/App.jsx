@@ -12,9 +12,11 @@ import axios from "axios";
 function App() {
   const [data, setData] = useState([])
   const [size, setSize] = useState("42")
-  const [img, setImg] = useState("regular")
+  const [img, setImg] = useState("slim")
   const [price, setPrice] = useState("1200")
   const [empty, setemptyq] = useState("1200")
+  const [imgSelet, setImgSelet] = useState([])
+
  
  
 useEffect(() => {
@@ -23,7 +25,7 @@ useEffect(() => {
     try {
       const response = await axios.get('http://localhost:5000/');
       // console.log(response.data.getNotes);
-setData(response.data.getNotes)
+setData(response.data)
 
     } catch (error) {
       console.error(error);
@@ -34,20 +36,61 @@ setData(response.data.getNotes)
 }, [empty])
 console.log(data);
 
+const targetName = img;
 
+const selectImg=[]
+// Find the object with the specified name
+const targetObject = data.find(item => item.name === targetName);
+
+// Check if the object with the specified name exists
+if (targetObject) {
+    // Loop through the nested "img" array for the target object
+    targetObject.img.forEach((imgValue, imgIndex) => {
+      selectImg.push(`${imgValue}`);
+    });
+} else {
+    console.log(`Object with name "${targetName}" not found.`);
+}
+
+// console.log(selectImg)
+
+const selectListItems = selectImg.map((elet,index) =>
+
+<>
+  <img onClick={()=>setImgSelet(elet)} className="listImage" key={index} src={`/${elet}.webp`} alt={elet} />
+  </>
+  );
+
+
+  // const siz = selectImg.map((elet,index) =>
+
+  // <>
+  //   <img onClick={()=>setImgSelet(elet)} className="listImage" key={index} src={`/${elet}.webp`} alt={elet} />
+  //   </>
+  //   );
 
 const listItems = data.map((ele,index) =>
 
+
 <>
   <div className="radio"   >
-  <input key={index} type="radio" id="html" name="fav_language" value={ele.name} defaultChecked  onClick={()=>setImg(ele.name)}/>
+  <input key={index} type="radio" id="html" name="fav_language" value={index} defaultChecked  onClick={()=>setImg(ele.name)}/>
         <label htmlFor="html">{ele.name}</label>
       </div>
   </>
   
   );
-
   
+// const imgindex = data.map((ele,index) =>
+
+
+// <>
+// <img src={`/${imgSelet}.webp`} alt="hello" />
+//   </>
+  
+//   );
+
+  // <img src={`/${imgSelet}.webp`} alt="hello" />
 
 const select=( id)=>{ 
 console.log(id);
@@ -69,13 +112,17 @@ else if(id=="45"){
 }
 }
 
+console.log(imgSelet)
   return (
     <>
       <div className="header">
        <div className="product">
 
-    {(img=="regular")? <img src=" /jeans-blue.png" />: <img src=" /jeans-png.jpg" />}
-        
+    {/* {(img=="regular")? <img src=" /jeans-blue.png" />: <img src=" /jeans-png.jpg" />} */}
+
+
+     <img className="bigImg" src={`/${imgSelet}.webp`} alt="clicke any photos" />
+
       </div>
       <div className="addCart">
       <h3 > strechable Blue Narrow plus size jeans</h3>
@@ -110,6 +157,11 @@ else if(id=="45"){
 
 
       </div>
+      </div>
+      <div className="selectedImage">
+       
+{selectListItems}
+       
       </div>
     </>
   )

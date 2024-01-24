@@ -2,6 +2,7 @@ const express = require('express');
 const mongoose = require('mongoose');
 const shoppe=require('./module/userModules');
 const cors = require('cors');
+
 // const notesRoutes = require('./routes/notes');
 // const register = require('./routes/registerRoutes');
 // const auth = require("./models/auth");
@@ -20,8 +21,8 @@ app.use(cors());
 
 app.get('/', async(req, res) => {
     try {
-        const getNotes= await shoppe.find()
-       res.status(200).json({getNotes});
+        const getData= await shoppe.find()
+       res.status(200).json(getData);
       } catch (error) {
           res.status(500).send(error.message)
       }
